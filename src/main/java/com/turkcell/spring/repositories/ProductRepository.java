@@ -3,6 +3,7 @@ package com.turkcell.spring.repositories;
 import com.turkcell.spring.entities.concretes.Product;
 import com.turkcell.spring.entities.dtos.product.ProductForGetByIdDto;
 import com.turkcell.spring.entities.dtos.product.ProductForListingDto;
+import com.turkcell.spring.entities.dtos.product.ProductForOrderAddDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -24,7 +25,17 @@ public interface ProductRepository extends JpaRepository<Product,Short> {
     @Query(value = "Select new com.turkcell.spring.entities.dtos.product.ProductForListingDto" +
             "(p.productId,p.productName,p.unitPrice,p.quantityPerUnit,p.unitsInStock,p.unitsOnOrder,p.discontinued,od.quantity,od.discount) " +
             "from Product p Inner join p.orderDetails od")
+    List<ProductForListingDto> getForListing();
+
+    @Query(value = "Select new com.turkcell.spring.entities.dtos.product.ProductForListingDto" +
+            "(p.productId,p.productName,p.unitPrice,p.quantityPerUnit,p.unitsInStock,p.unitsOnOrder,p.discontinued,od.quantity,od.discount) " +
+            "from Product p Inner join p.orderDetails od")
     List<ProductForListingDto> getAllForListing();
+
+    @Query(value = "Select new com.turkcell.spring.entities.dtos.product.ProductForOrderAddDto" +
+            "(p.unitPrice,p.unitsInStock) " +
+            "from Product p where p.productId =:productId")
+    ProductForOrderAddDto findUnitPriceAndUnitsInStockById(short productId);
 
 
     @Query(value = "Select new com.turkcell.spring.entities.dtos.product.ProductForGetByIdDto" +

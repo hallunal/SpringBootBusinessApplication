@@ -2,10 +2,10 @@ package com.turkcell.spring.controllers;
 
 import com.turkcell.spring.business.abstracts.OrderService;
 import com.turkcell.spring.entities.dtos.order.OrderForAddDto;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.turkcell.spring.entities.dtos.order.OrderForListingWithProductDto;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("orders")
@@ -19,6 +19,11 @@ public class OrdersController {
     @PostMapping("add")
     public void add(@RequestBody OrderForAddDto request){
         orderService.add(request);
+    }
+
+    @GetMapping("getOrderWithProducts")
+    public List<OrderForListingWithProductDto> getOrderWithProducts() {
+        return orderService.getAllByDto();
     }
 
 }

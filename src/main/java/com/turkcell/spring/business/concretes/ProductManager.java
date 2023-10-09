@@ -5,10 +5,7 @@ import com.turkcell.spring.business.exceptions.BusinessException;
 import com.turkcell.spring.entities.concretes.Category;
 import com.turkcell.spring.entities.concretes.Product;
 import com.turkcell.spring.entities.concretes.Supplier;
-import com.turkcell.spring.entities.dtos.product.ProductForAddDto;
-import com.turkcell.spring.entities.dtos.product.ProductForGetByIdDto;
-import com.turkcell.spring.entities.dtos.product.ProductForListingDto;
-import com.turkcell.spring.entities.dtos.product.ProductForUpdateDto;
+import com.turkcell.spring.entities.dtos.product.*;
 import com.turkcell.spring.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +20,6 @@ public class ProductManager implements ProductService {
 
     @Override
     public void add(ProductForAddDto productForAddDto) {
-
-        productWithSameNameShouldNotExist(productForAddDto.getProductName());
-
         Product product = new Product();
         product.setProductName(productForAddDto.getProductName());
         product.setUnitPrice(productForAddDto.getUnitPrice());
@@ -33,7 +27,6 @@ public class ProductManager implements ProductService {
         product.setUnitsInStock(productForAddDto.getUnitsInStock());
         product.setUnitsOnOrder(productForAddDto.getUnitsOnOrder());
         product.setReorderLevel(productForAddDto.getReorderLevel());
-        product.setDiscontinued(0);
 
         Supplier s = new Supplier();
         s.setSupplierId(productForAddDto.getSupplierId());
@@ -47,12 +40,23 @@ public class ProductManager implements ProductService {
 
     @Override
     public List<ProductForListingDto> getAll() {
-        return productRepository.getAllForListing();
+        return productRepository.getForListing();
     }
 
     @Override
     public ProductForGetByIdDto getById(short id) {
         return productRepository.getForById(id);
+    }
+
+    @Override
+    public float getUnitPriceById(short id) {
+        ProductForOrderAddDto productForOrderAddDto = productRepository.findUnitPriceAndUnitsInStockById(id);
+        return productForOrderAddDto.getUnitPrice();
+    }
+    @Override
+    public float getUnitsInStockById(short id) {
+        ProductForOrderAddDto productForOrderAddDto = productRepository.findUnitPriceAndUnitsInStockById(id);
+        return productForOrderAddDto.getUnitsInStock();
     }
 
     @Override
@@ -75,7 +79,13 @@ public class ProductManager implements ProductService {
         c.setCategoryId(productForUpdateDto.getCategoryId());
         product.setCategory(c);
 
-         productRepository.save(product);
+        productRepository.save(product);
+    }
+    @Override
+    public  void updateProductUnitsInStocksForOrderAdd(short id,short stock){
+        Product product = productRepository.getReferenceById(id);
+        product.setUnitsInStock((short) (product.getUnitsInStock() - stock));
+        productRepository.save(product);
     }
 
     @Override

@@ -16,6 +16,9 @@ public interface ProductService {
     ProductForGetByIdDto getById(short id);
     void update(short id, ProductForUpdateDto productForUpdateDto);
     void delete(short id);
+    public float getUnitPriceById(short id);
+    public float getUnitsInStockById(short id);
+    public  void updateProductUnitsInStocksForOrderAdd(short id,short stock);
     Product findByProductName(String productName);
     List<Product> findByProductNameContaining (String name);
     List<Product> findByUnitPriceGreaterThan(float unitPrice);

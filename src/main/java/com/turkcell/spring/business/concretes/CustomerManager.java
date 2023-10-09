@@ -2,7 +2,6 @@ package com.turkcell.spring.business.concretes;
 
 import com.turkcell.spring.business.abstracts.CustomerService;
 import com.turkcell.spring.business.exceptions.BusinessException;
-import com.turkcell.spring.entities.concretes.Category;
 import com.turkcell.spring.entities.concretes.Customer;
 import com.turkcell.spring.entities.dtos.customer.CustomerForAddDto;
 import com.turkcell.spring.entities.dtos.customer.CustomerForGetByIdDto;
